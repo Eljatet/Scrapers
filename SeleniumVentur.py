@@ -13,9 +13,9 @@ from selenium.common.exceptions import ElementNotVisibleException
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import UnexpectedAlertPresentException
 contProductos=0
-
 def productos():
 	global contProductos
+	global browser,f2,f3
 	sum=0
 	for i in range(1,31):
 		try:
@@ -77,6 +77,7 @@ def productos():
 	return sum
 
 def buscaproductos():
+	global browser,f2,f3
 	try:
 		sumaProductos=0
 		browser.find_element_by_id('subcategories')
@@ -116,75 +117,75 @@ def buscaproductos():
 					break;
 		except NoSuchElementException:
 			sumaProductos=(productos()+sumaProductos)
-
-
-reload(sys)
-sys.setdefaultencoding('utf-8')
-f2=codecs.open('loggVentur.txt','w','utf-8')
-f3=codecs.open('VenturScrapy.txt','wb','utf-8')
-f3.write('Name'+';'+'Referencia'+';'+'Fabricante'+';'+'Stock'+';'+'Precio'+';'+'\n')
-#chromedriver = 'C:\chromedriver.exe'
-#browser= webdriver.Chrome(chromedriver)
-browser = webdriver.PhantomJS('C:\phantomjs.exe')
-browser.set_window_size(1280,1024)
-start = time.clock()
-browser.get('http://www.portalodontologico.es/authentication.php?back=index.php')
-username = browser.find_element_by_id("email")
-password = browser.find_element_by_id("passwd")
-username.clear()
-password.clear()
-username.send_keys("pedidos@dentaltix.com")
-password.send_keys("8UCoq37D")
-browser.find_element_by_xpath('//*[@id="SubmitLogin"]').click()
-urls=browser.find_element_by_xpath('//*[@id="categories_block_left"]/div')
-ListlinkerHref = urls.find_elements_by_xpath("//*[@href]")
-for ini in range(1,6):
-	if(ini==2):
-		url=browser.find_element_by_xpath('//*[@id="categories_block_left"]/div/ul/li[2]/a')
-		href = url.get_attribute('href')
-		print(href)
-		browser.get(href)
-		print(href)
-		buscaproductos()
-	else:				
-		for pag in range(1,100):
-			try:
-				if(ini==3 and (pag!=3 or pag!=4 or pag!=5)):
-					url=browser.find_element_by_xpath('//*[@id="categories_block_left"]/div/ul/li[%d]/ul/li[%d]/a'% (ini,pag))
-					href = url.get_attribute('href')
-					print(href)
-					browser.get(href)
-					buscaproductos()
-				elif(ini==4 and (pag!=2 or pag!=3 or pag!=4)):
-					url=browser.find_element_by_xpath('//*[@id="categories_block_left"]/div/ul/li[%d]/ul/li[%d]/a'% (ini,pag))
-					href = url.get_attribute('href')
-					print(href)
-					browser.get(href)
-					buscaproductos()
-				elif(ini==5):
-					url=browser.find_element_by_xpath('//*[@id="categories_block_left"]/div/ul/li[%d]/ul/li[%d]/a'% (ini,pag))
-					href = url.get_attribute('href')
-					print(href)
-					browser.get(href)
-					buscaproductos()
-				for pag2 in range(1,100):
-					try:
-						url=browser.find_element_by_xpath('//*[@id="categories_block_left"]/div/ul/li[%d]/ul/li[%d]/ul/li[%d]/a'% (ini,pag,pag2))
+def main():
+	global browser,f2,f3
+	reload(sys)
+	sys.setdefaultencoding('utf-8')
+	f2=codecs.open('loggVentur.txt','w','utf-8')
+	f3=codecs.open('VenturScrapy.txt','wb','utf-8')
+	f3.write('Name'+';'+'Referencia'+';'+'Fabricante'+';'+'Stock'+';'+'Precio'+';'+'\n')
+	chromedriver = 'C:\chromedriver.exe'
+	browser= webdriver.Chrome(chromedriver)
+	#browser = webdriver.PhantomJS('C:\phantomjs.exe')
+	#browser.set_window_size(1280,1024)
+	start = time.clock()
+	browser.get('http://www.portalodontologico.es/authentication.php?back=index.php')
+	username = browser.find_element_by_id("email")
+	password = browser.find_element_by_id("passwd")
+	username.clear()
+	password.clear()
+	username.send_keys("pedidos@dentaltix.com")
+	password.send_keys("8UCoq37D")
+	browser.find_element_by_xpath('//*[@id="SubmitLogin"]').click()
+	urls=browser.find_element_by_xpath('//*[@id="categories_block_left"]/div')
+	ListlinkerHref = urls.find_elements_by_xpath("//*[@href]")
+	for ini in range(1,6):
+		if(ini==2):
+			url=browser.find_element_by_xpath('//*[@id="categories_block_left"]/div/ul/li[2]/a')
+			href = url.get_attribute('href')
+			print(href)
+			browser.get(href)
+			print(href)
+			buscaproductos()
+		else:				
+			for pag in range(1,100):
+				try:
+					if(ini==3 and (pag!=3 or pag!=4 or pag!=5)):
+						url=browser.find_element_by_xpath('//*[@id="categories_block_left"]/div/ul/li[%d]/ul/li[%d]/a'% (ini,pag))
 						href = url.get_attribute('href')
 						print(href)
 						browser.get(href)
 						buscaproductos()
-					except WebDriverException,UnexpectedAlertPresentException:
-						pass
-					except NoSuchElementException:
-						print("----------------------------------------")
-						break;
-			except NoSuchElementException:
-				break;
-end = time.clock()
-tiempoEjec= (end - start)/3600
-f2.write("TIEMPO TOTAL DE EJECUCION: "+str(int(tiempoEjec))+"horas")
-print("PROGRAMA SCRAPY DE VENTUR FINALIZADO")
-f2.close()
-f3.close()
-browser.close()
+					elif(ini==4 and (pag!=2 or pag!=3 or pag!=4)):
+						url=browser.find_element_by_xpath('//*[@id="categories_block_left"]/div/ul/li[%d]/ul/li[%d]/a'% (ini,pag))
+						href = url.get_attribute('href')
+						print(href)
+						browser.get(href)
+						buscaproductos()
+					elif(ini==5):
+						url=browser.find_element_by_xpath('//*[@id="categories_block_left"]/div/ul/li[%d]/ul/li[%d]/a'% (ini,pag))
+						href = url.get_attribute('href')
+						print(href)
+						browser.get(href)
+						buscaproductos()
+					for pag2 in range(1,100):
+						try:
+							url=browser.find_element_by_xpath('//*[@id="categories_block_left"]/div/ul/li[%d]/ul/li[%d]/ul/li[%d]/a'% (ini,pag,pag2))
+							href = url.get_attribute('href')
+							print(href)
+							browser.get(href)
+							buscaproductos()
+						except WebDriverException,UnexpectedAlertPresentException:
+							pass
+						except NoSuchElementException:
+							print("----------------------------------------")
+							break;
+				except NoSuchElementException:
+					break;
+	end = time.clock()
+	tiempoEjec= (end - start)/3600
+	f2.write("TIEMPO TOTAL DE EJECUCION: "+str(int(tiempoEjec))+"horas")
+	print("PROGRAMA SCRAPY DE VENTUR FINALIZADO")
+	f2.close()
+	f3.close()
+	browser.close()
