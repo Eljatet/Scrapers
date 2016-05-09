@@ -48,12 +48,12 @@ def consumo(URL):
 		time.sleep(2)
 		browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 		time.sleep(2)
-	if(sumReal<=3):
+	if(sumReal<1):
 		obtenerDatos(URL,start2)
 	else:
 		try:
 			for i in range(sumReal):
-				print(i)
+				time.sleep(0.3)
 				try:
 					element = WebDriverWait(browser, 20).until(
 					EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div[1]/div/div[3]/div/div[3]/div/div/div[2]/div[2]/a')))
@@ -65,6 +65,7 @@ def consumo(URL):
 					finally:
 						time.sleep(1.4)
 						browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+			print("Correcto")
 			obtenerDatos(URL,start2)
 		except NoSuchElementException:
 			if(contError<=4):
@@ -73,7 +74,8 @@ def consumo(URL):
 				consumo(URL)
 			else:
 				contError=0
-				consumo(URL)
+				print(i)
+				obtenerDatos(URL,start2)
 		except WebDriverException:
 			if(contError<=4):
 				print("Intento n: "+str(contError))
@@ -81,7 +83,8 @@ def consumo(URL):
 				consumo(URL)
 			else:
 				contError=0
-				consumo(URL)
+				print(i)
+				obtenerDatos(URL,start2)
 def obtenerDatos(URL,start3):
 	global browser,f2,f3
 	suma=0
